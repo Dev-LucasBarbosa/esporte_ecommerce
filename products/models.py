@@ -1,6 +1,7 @@
 from django.db import models
 from .utils import unique_slug_generator
 from django.db.models.signals import pre_save
+from django.urls import reverse
 
 # Create your models here.
 
@@ -40,7 +41,8 @@ class Product(models.Model): #product_category
     objects = ProductManager()
 
     def get_absolute_url(self):
-        return "/products/{slug}/".format(slug = self.slug)
+        #return "/products/{slug}/".format(slug = self.slug)
+        return reverse("products:detail", kwargs={"slug":self.slug})
 
     def __str__(self):
         return self.title
