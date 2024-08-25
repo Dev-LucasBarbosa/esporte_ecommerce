@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .forms import ContactForm, LoginForm, RegisterForm
-from django.contrib.auth import authenticate, login, get_user_model
+from django.contrib.auth import authenticate, login, logout,get_user_model
 
 def home_page(request):
     context = {
@@ -36,6 +36,13 @@ def contact_page(request):
         #print(request.POST.get('email'))
         #print(request.POST.get('Mensagem'))
     return render(request, "Contact/contact_page.html", context)
+
+def logout_page(request):
+    context = {
+        "content": "Você efetuou o logout com sucesso!"
+    }
+    logout(request)
+    return render(request, "Auth/logout.html", context)
 
 User = get_user_model()
 
