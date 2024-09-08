@@ -1,9 +1,7 @@
-from typing import Any
-from django.db.models.base import Model as Model
-from django.db.models.query import QuerySet
 from django.http import Http404
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
+from carts.models import Cart
 from .models import Product
 
 # Create your views here.
@@ -52,6 +50,12 @@ class ProductDetailView(DetailView):
 class ProductDetailSlugView(DetailView):
     queryset = Product.objects.all()
     template_name = "products/detail.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ProductDetailSlugView, self).get_context_data(*args,**kwargs)
+        cart_obj, new_obj = Cart.objects.new_or_get(self.request)
+        context['cart'] = cart_obj
+        return context
 
     def get_object(self, *args, **kwargs):
         slug = self.kwargs.get('slug')

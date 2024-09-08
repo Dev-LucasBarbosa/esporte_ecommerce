@@ -4,6 +4,7 @@ from .forms import ContactForm, LoginForm, RegisterForm
 from django.contrib.auth import authenticate, login, logout,get_user_model
 
 def home_page(request):
+    print(request.session.get('first_name', 'Unknow'))
     context = {
         "title": "Página principal",
         "content": "Bem-vindo a página principal"
