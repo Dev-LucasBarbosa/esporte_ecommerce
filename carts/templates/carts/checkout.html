@@ -11,8 +11,7 @@
   <div class='col-12 col-md-6'> 
     <p class='lead'>Continuar como Convidado</p>
     {% url "guest_register" as guest_register_url %}
-    {% include 'accounts/snippets/form.html' with form=guest_form 
-    next_url=request.build_absolute_uri action_url=guest_register_url %}
+    {% include 'accounts/snippets/form.html' with form=guest_form next_url=request.build_absolute_uri action_url=guest_register_url %}
   </div>
 </div>
 {% else %}
@@ -34,11 +33,13 @@
       {% include 'address/form.html' with form=address_form next_url=request.build_absolute_uri action_url=checkout_address_create address_type='billing' %}
     </div>
   </div>
-  <h1>Finalizando a Compra</h1>
-  <p>Total do carrinho: {{ object.cart.total }}</p>
-  <p>Frete: {{ object.shipping_total }}</p>
-  <p>Total: {{ object.total }}</p>
-  <button>Checkout</button> 
- {% endif %}
+  {% else %}
+    <h1>Finalizando a Compra</h1>
+    
+    <p>Total do carrinho: {{ object.cart.total }}</p>
+    <p>Frete: {{ object.shipping_total }}</p>
+    <p>Total: {{ object.total }}</p>
+    <button>Checkout</button> 
+  {% endif %}
 {% endif %}
 {% endblock %}
