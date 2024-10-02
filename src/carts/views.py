@@ -11,6 +11,9 @@ from .models import Cart
 
 
 # Create your views here.
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
 def cart_page(request):
     cart_obj, new_obj = Cart.objects.new_or_get(request)
     return render(request, "carts/home.html", {"cart":cart_obj})
@@ -32,11 +35,12 @@ def cart_update(request):
             added = True
         request.session['cart_items'] = cart_obj.products.count()
         # Para saber se a requisição está vindo em Ajax
-        if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+        if is_ajax(request):
             print("Ajax request")
             json_data = {
                 "added": added,
                 "removed": not added,
+                "cartItemCount": cart_obj.products.count()
             }
             return JsonResponse(json_data)
     return redirect("cart:home")
