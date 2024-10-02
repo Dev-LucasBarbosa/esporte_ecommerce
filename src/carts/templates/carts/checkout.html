@@ -47,6 +47,9 @@
   </div>
   {% else %}
     <h1>Finalizando a Compra</h1>
+    <p>Items do Carrinho:{% for product in object.cart.products.all %}{{ product }}{% if not forloop.last %},{% endif %}{% endfor %}</p>
+    <p>Endereço de Entrega:{{ object.shipping_address.get_address }}</p>
+    <p>Endereço de Cobrança:{{ object.billing_address.get_address }}</p>
     <p>Total do carrinho: {{ object.cart.total }}</p>
     <p>Frete: {{ object.shipping_total }}</p>
     <p>Total: {{ object.total }}</p>

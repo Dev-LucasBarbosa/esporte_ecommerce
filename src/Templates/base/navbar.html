@@ -1,5 +1,6 @@
 {% url 'home' as home_url %}
 {% url 'contact' as contact_url %}
+{% url 'about' as about_url %}
 {% url 'products:list' as products_list_url %}
 {% url 'login' as login_url %}
 {% url 'logout' as logout_url %}
@@ -23,6 +24,9 @@
         <li class="nav-item {% if request.path == contact_url %} active {% endif %}">
             <a class="nav-link" href="{{ contact_url }}">Contato</a>
         </li>
+        <li class="nav-item {% if request.path == about_url %} active {% endif %}">
+          <a class="nav-link" href="{{ about_url }}">Sobre</a>
+      </li>
         <li class="nav-item {% if request.path == products_list_url %} active {% endif %}">
             <a class="nav-link" href="{{ products_list_url }}">Produtos</a>
         </li>
