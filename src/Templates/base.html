@@ -34,6 +34,14 @@
                         success:function(data){
                             console.log("Sucesso")
                             console.log(data)
+                            console.log("Adicionado", data.added)
+                            console.log("Removido", data.removed)
+                            const submitSpan = thisForm.find(".submit-span")
+                            if(data.added){
+                                submitSpan.html("No carrinho <button type='submit' class='btn btn-link'>Excluir</button>")
+                            } else{
+                                submitSpan.html("<button type='submit' class='btn btn-success'>Adicionar</button>")
+                            }
                         },
                         error:function(errorData){
                             console.log("Erro")
