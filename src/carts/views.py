@@ -15,8 +15,10 @@ def cart_page(request):
     return render(request, "carts/home.html", {"cart":cart_obj})
 
 def cart_update(request):
-    print(request.POST)
     product_id = request.POST.get('product_id')
+    # Para saber se a requisição está vindo em Ajax
+    if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+        print("Ajax request")
     if product_id is not None:
         try:
             product_obj = Product.objects.get(id = product_id)
