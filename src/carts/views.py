@@ -14,6 +14,17 @@ from .models import Cart
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
+def cart_detail_api_view(request):
+    cart_obj, new_obj = Cart.objects.new_or_get(request)
+    products = [{
+        "id": x.id,
+        "url": x.get_absolute_url(),
+        "name": x.title,
+        "price": x.price
+    } for x in cart_obj.products.all()]
+    cart_data = {"products":products,"total":cart_obj.total}
+    return JsonResponse(cart_data)
+
 def cart_page(request):
     cart_obj, new_obj = Cart.objects.new_or_get(request)
     return render(request, "carts/home.html", {"cart":cart_obj})
