@@ -1,7 +1,10 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from .forms import ContactForm
 from django.contrib.auth import authenticate, get_user_model
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 def home_page(request):
     context = {
@@ -29,10 +32,11 @@ def contact_page(request):
 
     if contact_form.is_valid():
         print(contact_form.cleaned_data)
+        if is_ajax(request):
+            return JsonResponse({"message":"Obrigado!"})
+    if contact_form.errors:
+        errors = contact_form.errors.as_json()
+        if is_ajax(request):
+            return HttpResponse(errors, status=400, content_type='application/json')
 
-    #if request.method == "POST":
-        #print(request.POST)
-        #print(request.POST.get('Nome_Completo'))
-        #print(request.POST.get('email'))
-        #print(request.POST.get('Mensagem'))
     return render(request, "Contact/contact_page.html", context)

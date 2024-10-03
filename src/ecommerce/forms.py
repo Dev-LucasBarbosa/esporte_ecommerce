@@ -32,8 +32,12 @@ class ContactForm(forms.Form):
                 }
             )
         )
+    
     def clean_email(self):
         email = self.cleaned_data.get("email")
-        if not "gmail.com" or "outlook.com.br" in email:
+        if not email.endswith("gmail.com") and not email.endswith("outlook.com.br"):
             raise forms.ValidationError("O Email dever ser do gmail ou do outlook")
-        raise email
+        return email
+    
+    def clean_content(self):
+        raise forms.ValidationError("O conteúdo está errado.")
