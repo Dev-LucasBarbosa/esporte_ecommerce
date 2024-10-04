@@ -34,7 +34,6 @@ class UserManager(BaseUserManager):
             is_staff = True,
             is_admin = True
         )
-        return user
 
 
 class User(AbstractBaseUser):
@@ -76,7 +75,7 @@ class User(AbstractBaseUser):
 
 class GuestEmail(models.Model):
     email = models.EmailField()
-    activate = models.BooleanField(default = True)
+    active = models.BooleanField(default = True)
     update = models.DateTimeField(auto_now = True)
     timestamp = models.DateTimeField(auto_now_add = True)
 
