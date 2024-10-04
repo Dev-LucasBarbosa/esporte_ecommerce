@@ -1,11 +1,10 @@
 $(document).ready(function(){
-    // using jQuery
     function getCookie(name) {
       let cookieValue = null;
       if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
-          const cookie = jQuery.trim(cookies[i]);
+          const cookie = cookies[i].trim();
           if (cookie.substring(0, name.length + 1) === (name + '=')) {
             cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
             break;
@@ -14,19 +13,24 @@ $(document).ready(function(){
       }
       return cookieValue;
     }
-    const csrftoken = getCookie('csrftoken');
   
-    function csrfSafeMethod(method) {
-      // esses métodos HTTP não requerem proteção CSRF
-      return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    const csrftoken = getCookie('csrftoken');
+    console.log("CSRF Token:", csrftoken);
+  
+    function sendData(url, data, method='POST') {
+      console.log("URL:", url);
+  
+      return fetch(url, {
+        method: method,
+        headers: {
+          'X-CSRFToken': csrftoken,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(data)
+      });
     }
-    $.ajaxSetup({
-      beforeSend: function(xhr, settings) {
-        //Verifica se o método HTTP precisa de TOKEN CSRF e verifica se a requisição
-        //não é cross domain(domínio diferente do domínio do site)
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-          xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-      }
-    });
-  })
+    const url = window.location.pathname;
+    sendData(url)
+  });
