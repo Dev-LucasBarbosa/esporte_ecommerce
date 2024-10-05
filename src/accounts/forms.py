@@ -43,7 +43,7 @@ class GuestForm(forms.Form):
     email = forms.EmailField()
 
 class LoginForm(forms.Form):
-    username = forms.EmailField(label='Email')
+    email = forms.EmailField(label='Email')
     password = forms.CharField(widget=forms.PasswordInput)
 
 class RegisterForm(forms.ModelForm):
@@ -66,7 +66,6 @@ class RegisterForm(forms.ModelForm):
     def save(self, commit=True):
         user = super(RegisterForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password"])
-        user.active = False
         if commit:
             user.save()
         return user
