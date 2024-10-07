@@ -1,6 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
+from analytics.mixin import ObjectViewedMixin
 from carts.models import Cart
 from .models import Product
 
@@ -12,13 +13,9 @@ class ProductFeaturedListView(ListView):
     def get_queryset(self, *args, **kwargs):
         return Product.objects.featured()
     
-class ProductFeaturedDetailView(DetailView):
+class ProductFeaturedDetailView(ObjectViewedMixin, DetailView):
     queryset = Product.objects.all().featured()
     template_name = "products/featured-detail.html"
-
-    #def get_queryset(self, *args, **kwargs):
-        #request = self.request
-        #return Product.objects.featured()
 
 # Class Based View
 class ProductListView(ListView):
@@ -32,7 +29,7 @@ class ProductListView(ListView):
         context['cart'] = cart_obj
         return context
 
-class ProductDetailView(DetailView):
+class ProductDetailView(ObjectViewedMixin, DetailView):
     #queryset = Product.objects.all()
     template_name = "products/detail.html"
 
@@ -48,7 +45,7 @@ class ProductDetailView(DetailView):
             raise Http404("Esse produto não existe!")
         return instance
     
-class ProductDetailSlugView(DetailView):
+class ProductDetailSlugView(ObjectViewedMixin, DetailView):
     queryset = Product.objects.all()
     template_name = "products/detail.html"
 

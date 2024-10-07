@@ -10,6 +10,6 @@ def get_client_ip(request):
     else:
         '''Se o cabeçalho 'HTTP_X_FORWARDED_FOR' não estiver presente, usamos o endereço
         IP do user que está disponível em 'request.META["REMOTE_ADDR"]'.'''
-        ip = request.META.get("REMOTE_ADDR")
+        ip = request.META.get("REMOTE_ADDR", None)
 
     return ip
