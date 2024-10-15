@@ -55,6 +55,8 @@ INSTALLED_APPS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User'
+FORCE_SESSION_TO_ONE = False
+FORCE_INACTIVE_USER_ENDSESSION = False
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

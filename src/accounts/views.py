@@ -5,6 +5,7 @@ from django.shortcuts import render,redirect
 from django.utils.http import url_has_allowed_host_and_scheme
 from .forms import LoginForm, RegisterForm, GuestForm
 from .models import GuestEmail
+from .signals import user_logged_in
 
 def guest_register_view(request):
     form = GuestForm(request.POST or None)
@@ -35,6 +36,7 @@ class LoginView(FormView):
         user = authenticate(request=self.request, username=email, password=password)
         if user is not None:
             login(self.request, user)
+            user_logged_in.send(sender=user.__class__, instance=user, request=self.request)
             try:
                 del self.request.session['guest_email_id']
             except:
