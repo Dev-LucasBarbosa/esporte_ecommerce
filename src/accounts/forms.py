@@ -44,11 +44,11 @@ class GuestForm(forms.Form):
 
 class LoginForm(forms.Form):
     email = forms.EmailField(label='Email')
-    password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(label='Senha', widget=forms.PasswordInput)
 
 class RegisterForm(forms.ModelForm):
 
-    password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(label='Senha', widget=forms.PasswordInput)
     password_2 = forms.CharField(label='Confirme a Senha', widget=forms.PasswordInput)
 
     class Meta:

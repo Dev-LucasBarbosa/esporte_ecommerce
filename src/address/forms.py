@@ -5,10 +5,10 @@ class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
         fields = [
-            'address_line_1',
-            'address_line_2',
-            'city',
-            'country',
-            'state',
-            'postal_code'
+            'endereço_1',
+            'endereço_2',
+            'cidade',
+            'país',
+            'estado',
+            'cep'
         ]

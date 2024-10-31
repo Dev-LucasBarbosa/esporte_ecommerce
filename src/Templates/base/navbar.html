@@ -19,7 +19,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item {% if request.path == home_url %} active {% endif %}">
-          <a class="nav-link" href="{{ home_url }}">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="{{ home_url }}">Início <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item {% if request.path == contact_url %} active {% endif %}">
             <a class="nav-link" href="{{ contact_url }}">Contato</a>
@@ -32,11 +32,11 @@
         </li>
         {% if request.user.is_authenticated %}
           <li class="nav-item {% if request.path == login_url %} active {% endif %}"> 
-            <a class="nav-link" href="{{ logout_url }}">Logout</a> 
+            <a class="nav-link" href="{{ logout_url }}">Sair</a> 
           </li>
         {% else %}
           <li class="nav-item {% if request.path == login_url %} active {% endif %}">
-            <a class="nav-link" href="{{ login_url }}?next={{request.path}}">Login</a>
+            <a class="nav-link" href="{{ login_url }}?next={{request.path}}">Entrar</a>
           </li>
           <li class="nav-item {% if request.path == register %} active {% endif %}"> 
             <a class="nav-link" href="{{ register_url }}">Registrar-se</a> 
