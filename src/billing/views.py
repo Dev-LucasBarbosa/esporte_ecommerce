@@ -9,6 +9,12 @@ import json
 # Create your views here.
 stripe.api_key = settings.STRIPE_API_KEY
 
+def payment_success_view(request):
+    return render(request, 'billing/payment-success.html')
+
+def payment_failed_view(request):
+    return render(request, 'billing/payment-failed.html')
+
 def payment_method_view(request):
     context = {'publish_key': settings.STRIPE_PUB_KEY}
     return render(request, 'billing/payment-method.html', context)
