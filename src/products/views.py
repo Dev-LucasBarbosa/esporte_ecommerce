@@ -1,6 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
+from analytics.models import ObjectViewed
 from analytics.mixin import ObjectViewedMixin
 from carts.models import Cart
 from .models import Product
@@ -64,4 +65,9 @@ class ProductDetailSlugView(ObjectViewedMixin, DetailView):
         except Product.MultipleObjectsReturned:
             qs = Product.objects.filter(slug = slug, active = True)
             instance =  qs.first()
+        if self.request.user.is_authenticated and not self.request.user.is_anonymous:
+            ObjectViewed.objects.create(
+                user=self.request.user,
+                content_object=instance
+            )
         return instance

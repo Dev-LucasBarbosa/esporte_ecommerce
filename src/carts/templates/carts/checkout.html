@@ -51,10 +51,10 @@
     <p>Endereço de Entrega:{{ object.shipping_address.get_address }}</p>
     <p>Endereço de Cobrança:{{ object.billing_address.get_address }}</p>
     <p>Total do carrinho: {{ object.cart.total }}</p>
-    <p>Frete: {{ object.shipping_total }}</p>
-    <p>Total: {{ object.total }}</p>
+    <!-- <p>Frete: {{ object.shipping_total }}</p>
+    <p>Total: {{ object.total }}</p> -->
     <form class='form' method='POST' action="">{% csrf_token %}
-      <button type='submit'>Comprar</button>
+      <button type='submit'>Realizar Pagamento</button>
     </form> 
   {% endif %}
 {% endif %}

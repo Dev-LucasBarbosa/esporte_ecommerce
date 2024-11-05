@@ -1,13 +1,19 @@
-<div class="card" style="width: 18rem;">
-    {% if instance.image %}
-        <a href="{{ instance.get_absolute_url }}">
-            <img src="{{ instance.image.url }}" class="card-img-top" alt="{{ instance.title }} logo">
-        </a>
-    {% endif %}
-    <div class="card-body">
+<div class="card h-100">
+    <div class="card-img-wrapper">
+        {% if instance.image %}
+            <a href="{{ instance.get_absolute_url }}">
+                <img src="{{ instance.image.url }}" class="card-img-top" alt="{{ instance.title }} logo">
+            </a>
+        {% endif %}
+    </div>
+    <div class="card-body d-flex flex-column">
         <h5 class="card-title">{{ instance.title }}</h5>
-        <p class="card-text">{{ instance.description|truncatewords:14}}</p>
-        <a href="{{ instance.get_absolute_url }}" class="btn btn-primary">Detalhe</a>
-        {% include 'products/snippets/update-cart.html' with product=instance cart=cart %}
+        <p class="card-text flex-grow-1">{{ instance.description|truncatewords:14}}</p>
+    </div>
+    <div class="card-footer d-flex p-2">
+        <div class="d-flex justify-content-between w-100">
+            <a href="{{ instance.get_absolute_url }}" class="btn btn-primary btn-sm flex-grow-1 me-2 mr-2">Detalhe</a>
+            {% include 'products/snippets/update-cart.html' with product=instance cart=cart %}
+        </div>
     </div>
 </div>

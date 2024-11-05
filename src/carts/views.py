@@ -29,6 +29,19 @@ def cart_page(request):
     cart_obj, new_obj = Cart.objects.new_or_get(request)
     return render(request, "carts/home.html", {"cart":cart_obj})
 
+def cart_get_items(request):
+    cart_obj, new_obj = Cart.objects.new_or_get(request)
+    items = []
+    for product in cart_obj.products.all():
+        item = {
+            'id': product.id,
+            'name': product.title,
+            'quantity': 1,
+            'price': str(product.price),
+        }
+        items.append(item)
+    return JsonResponse({'items': items})
+
 def cart_update(request):
     product_id = request.POST.get('product_id')
     if product_id is not None:
@@ -45,7 +58,6 @@ def cart_update(request):
             cart_obj.products.add(product_obj) 
             added = True
         request.session['cart_items'] = cart_obj.products.count()
-        # Para saber se a requisição está vindo em Ajax
         if is_ajax(request):
             print("Ajax request")
             json_data = {
@@ -54,7 +66,6 @@ def cart_update(request):
                 "cartItemCount": cart_obj.products.count()
             }
             return JsonResponse(json_data)
-            # return JsonResponse({"message":"Erro 400"}, status = 400)
     return redirect("cart:home")
 
 def checkout_home(request):
@@ -86,7 +97,6 @@ def checkout_home(request):
             order_obj.save()
     
     if request.method == "POST":
-        #verifica se o pedido foi feito
         is_done = order_obj.check_done()
         if is_done:
             order_obj.mark_paid()
