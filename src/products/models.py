@@ -3,9 +3,10 @@ from django.db.models import Q
 from ecommerce.utils import unique_slug_generator
 from django.db.models.signals import pre_save
 from django.urls import reverse
+from django.conf import settings
 
 # Create your models here.
-
+User = settings.AUTH_USER_MODEL
 #Custom queryset
 class ProductQuerySet(models.query.QuerySet):
     def active(self):
@@ -65,3 +66,13 @@ def product_pre_save_receiver(sender, instance, *args, **kwargs):
         instance.slug = unique_slug_generator(instance)
 
 pre_save.connect(product_pre_save_receiver, sender = Product)
+
+class Review(models.Model):
+    user = models.ForeignKey(User, models.CASCADE)
+    product = models.ForeignKey(Product, models.CASCADE)
+    comment = models.TextField(max_length=250)
+    rate = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.id)

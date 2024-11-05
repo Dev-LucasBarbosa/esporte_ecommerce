@@ -5,15 +5,131 @@
     <div class='col-12 col-md-6'>
         <h1>{{ object.title }}</h1> <br/>
         {{ object.timestamp|timesince }} atrás
-        <h3>{{ "Um título qualquer"|title }}</h3>
         {% if object.image %}
             <img src='{{ object.image.url }}' class='img-fluid'/>
         {% endif %} <br/>
         {{ object.description|linebreaks }} <br/>
-        R$ {{ object.price}}
+        <p class="price">R$ {{ object.price }}</p>
     </div>
     <div class='col-12 col-md6'>
         {% include 'products/snippets/update-cart.html' with product=object cart=cart %}
     </div>
 </div>
+
+<!-- Formulário de Avaliação -->
+<div class="review-section">
+    <h3>Deixe sua Avaliação</h3>
+    <form id="review-form" method="POST" action="{% url 'products:review_rate_ajax' pk=object.id %}">
+        {% csrf_token %}
+        <label for="comment">Comentário:</label>
+        <textarea name="comment" id="comment" required class="form-control mb-2"></textarea>
+        
+        <label for="rate">Avaliação (1 a 5):</label>
+        <div class="star-rating mb-2">
+            <input type="radio" id="star-5" name="rate" value="5" required><label for="star-5" class="star">&#9733;</label>
+            <input type="radio" id="star-4" name="rate" value="4" required><label for="star-4" class="star">&#9733;</label>
+            <input type="radio" id="star-3" name="rate" value="3" required><label for="star-3" class="star">&#9733;</label>
+            <input type="radio" id="star-2" name="rate" value="2" required><label for="star-2" class="star">&#9733;</label>
+            <input type="radio" id="star-1" name="rate" value="1" required><label for="star-1" class="star">&#9733;</label>
+        </div>
+        
+        <button type="submit" class="btn btn-primary mt-2">Enviar Avaliação</button>
+    </form>
+</div>
+
+<!-- Área para Exibir as Avaliações -->
+<div id="reviews" class="review-list mt-4">
+    <h4>Avaliações</h4>
+    {% for review in object.review_set.all %}
+        <div class="review-item p-3 mb-2 bg-light rounded">
+            <p><strong>{{ review.user}}:</strong> <span class="rating">{{ review.rate }}</span></p>
+            <p>{{ review.comment }}</p>
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+    document.getElementById('review-form').addEventListener('submit', function(event) {
+        event.preventDefault();  // Evita o recarregamento da página
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro na requisição');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Atualiza a área de avaliações com a nova avaliação
+            const reviewsDiv = document.getElementById('reviews');
+            const newReview = document.createElement('div');
+            newReview.classList.add('review-item', 'p-3', 'mb-2', 'bg-light', 'rounded');
+            newReview.innerHTML = `
+                <p><strong>${data.user}:</strong> <span class="rating">${data.rate}</span></p>
+                <p>${data.comment}</p>
+            `;
+            reviewsDiv.prepend(newReview);  // Adiciona a nova avaliação no topo da lista
+
+            // Limpa o formulário
+            form.reset();
+
+            // Recarrega a página para mostrar a nova avaliação
+            location.reload();  // Atualiza a página
+        })
+        .catch(error => console.error('Erro:', error));
+    });
+</script>
+
+<style>
+    .review-section {
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+    .review-section h3 {
+        margin-bottom: 10px;
+    }
+    .star-rating {
+        direction: rtl;  /* Para permitir que o clique comece pela estrela mais alta */
+        display: inline-block;
+    }
+    .star {
+        font-size: 30px;  /* Ajuste o tamanho da estrela */
+        color: #FFD700;  /* Cor das estrelas */
+        cursor: pointer;  /* Mãozinha ao passar o mouse */
+    }
+    .star:hover,
+    .star:hover ~ .star {
+        color: #FFD700;  /* Cor ao passar o mouse */
+    }
+    .review-list {
+        margin-top: 20px;
+    }
+    .review-item {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+    }
+    .review-item p {
+        margin: 0;
+    }
+    .review-item .rating {
+        color: #f39c12;
+    }
+    .price {
+        font-size: 1.25rem;
+        color: #28a745;
+        font-weight: bold;
+    }
+</style>
 {% endblock %}

@@ -4,7 +4,9 @@ from django.views.generic import ListView, DetailView
 from analytics.models import ObjectViewed
 from analytics.mixin import ObjectViewedMixin
 from carts.models import Cart
-from .models import Product
+from .models import Product, Review
+from django.views import View
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -71,3 +73,22 @@ class ProductDetailSlugView(ObjectViewedMixin, DetailView):
                 content_object=instance
             )
         return instance
+    
+class ReviewRateAjaxView(View):
+    def post(self, request, *args, **kwargs):
+        product_id = self.kwargs.get('pk')
+        product = Product.objects.get(id=product_id)
+        comment = request.POST.get('comment')
+        rate = request.POST.get('rate')
+        user = request.user
+
+        # Cria e salva a avaliação
+        review = Review.objects.create(user=user, product=product, comment=comment, rate=rate)
+
+        # Retorna os dados da avaliação em JSON
+        return JsonResponse({
+            'user': review.user,
+            'comment': review.comment,
+            'rate': review.rate,
+            'created_at': review.created_at.strftime('%Y-%m-%d %H:%M:%S')
+        })
