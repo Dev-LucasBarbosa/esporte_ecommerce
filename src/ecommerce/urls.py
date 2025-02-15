@@ -42,7 +42,6 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', RegisterView.as_view(), name='register'),
     path('register/guest/', guest_register_view, name='guest_register'),
-    path('bootstrap/', TemplateView.as_view(template_name='bootstrap/example.html')),
     path('products/', include("products.urls", namespace="products")),
     path('search/', include("search.urls", namespace="search")),
     path('admin/', admin.site.urls),

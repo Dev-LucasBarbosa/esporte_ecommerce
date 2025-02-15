@@ -175,4 +175,3 @@ $(document).ready(function () {
       initializeStripe();
     }
   });
-  
