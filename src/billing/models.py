@@ -1,4 +1,3 @@
-import environ
 import stripe
 from django.conf import settings
 from django.db import models
@@ -8,7 +7,7 @@ from accounts.models import GuestEmail
 
 # Create your models here.
 User = settings.AUTH_USER_MODEL
-stripe.api_key ='sk_test_51QG43O054eFbHqanBugNQDi21YLr7XPIjp3FuNed3XoPbCkPCUdXrlFDbeDW691EZ5jaM0HQl3ZCUyA0DIRMmW7y00wj7HUk2a'
+stripe.api_key = settings.STRIPE_API_KEY
 
 class BillingProfileManager(models.Manager):
     def new_or_get(self,request):

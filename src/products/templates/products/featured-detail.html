@@ -1,9 +1,7 @@
-{% extends "base.html" %}
-
-{% block content %}
-    {{ object.title }} <br/>
-    {% if object.image %}
-        <img src='{{ object.image.url }}' class='img-fluid'/>
-    {% endif %} <br/>
-    {{ object.description }} 
-{% endblock %}
+{{ object.title }} 
+{{ object.description }}
+{% if object.images.all %}
+    {% for image in object.images.all %}
+        <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.alt_text|default:object.title }}">
+    {% endfor %}
+{% endif %}

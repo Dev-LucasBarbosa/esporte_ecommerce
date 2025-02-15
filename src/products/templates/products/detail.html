@@ -1,19 +1,62 @@
+<!-- Path: templates/products/detail.html -->
 {% extends "base.html" %}
 
 {% block content %}
-<div class='row'>
-    <div class='col-12 col-md-6'>
-        <h1>{{ object.title }}</h1> <br/>
-        {{ object.timestamp|timesince }} atrás
-        {% if object.image %}
-            <img src='{{ object.image.url }}' class='img-fluid'/>
-        {% endif %} <br/>
-        {{ object.description|linebreaks }} <br/>
-        <p class="price">R$ {{ object.price }}</p>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12 col-md-6">
+      {% if object.images.all %}
+        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            {% for image in object.images.all %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <img src="{{ image.image.url }}" class="d-block w-100" alt="{{ image.alt_text|default:object.title }}">
+              </div>
+            {% endfor %}
+          </div>
+          {% if object.images.count > 1 %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          {% endif %}
+        </div>
+      {% endif %}
     </div>
-    <div class='col-12 col-md6'>
-        {% include 'products/snippets/update-cart.html' with product=object cart=cart %}
+    
+    <div class="col-12 col-md-6">
+      <h1>{{ object.title }}</h1>
+
+      {% if object.discount_price %}
+        <h3 class="mb-3">
+          <span class="text-muted text-decoration-line-through">R$ {{ object.price }}</span>
+          <span class="text-danger">R$ {{ object.discount_price }}</span>
+        </h3>
+      {% else %}
+        <h3 class="mb-3">R$ {{ object.price }}</h3>
+      {% endif %}
+      
+      <div class="mb-4">
+        <p>{{ object.description|linebreaks }}</p>
+      </div>
+      
+      {% if object.stock > 0 %}
+        <p class="text-success">Em estoque: {{ object.stock }} unidades</p>
+      {% else %}
+        <p class="text-danger">Produto indisponível</p>
+      {% endif %}
+      
+      {% if object.category %}
+        <p class="mb-3">Categoria: {{ object.category}}</p>
+      {% endif %}
+      
+      {% include 'products/snippets/update-cart.html' with product=object %}
     </div>
+  </div>
 </div>
 
 <!-- Formulário de Avaliação -->
@@ -132,4 +175,4 @@
         font-weight: bold;
     }
 </style>
-{% endblock %}
+{% endblock content %}

@@ -1,3 +1,4 @@
+{% load static %}
 {% url 'home' as home_url %}
 {% url 'contact' as contact_url %}
 {% url 'about' as about_url %}
@@ -10,7 +11,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
     <div class="container">
       <a class="navbar-brand" href="{{ home_url }}">
-      <img src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt=""/>
+      <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="Logo">
       {% if nome_da_marca %} {{ nome_da_marca }} {% else %} Loja de Esporte {% endif %}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -42,8 +43,15 @@
             <a class="nav-link" href="{{ register_url }}">Registrar-se</a> 
           </li>
         {% endif %}
-        <li class="nav-item {% if request.path == cart_url %} active {% endif %}"></li>
-          <a class="nav-link" href="{{ cart_url }}"><span class="navbar-cart-count">{{ request.session.cart_items }}</span><i class="fa fa-shopping-cart"></i></a>
+        <li class="nav-item {% if request.path == cart_url %} active {% endif %}">
+          <a class="nav-link" href="{{ cart_url }}">
+            <span class="navbar-cart-count">
+              {% with request.session.cart_items|default:0 as cart_items %}
+                {{ cart_items }}
+              {% endwith %}
+            </span>
+            <i class="fa fa-shopping-cart"></i>
+          </a>
         </li>
       </ul>
       {% include 'search/snippets/search-form.html' %}
