@@ -8,10 +8,7 @@ from accounts.models import GuestEmail
 
 # Create your models here.
 User = settings.AUTH_USER_MODEL
-
-env = environ.Env()
-environ.Env.read_env()
-stripe.api_key = env('STRIPE_API_KEY')
+stripe.api_key ='sk_test_51QG43O054eFbHqanBugNQDi21YLr7XPIjp3FuNed3XoPbCkPCUdXrlFDbeDW691EZ5jaM0HQl3ZCUyA0DIRMmW7y00wj7HUk2a'
 
 class BillingProfileManager(models.Manager):
     def new_or_get(self,request):
