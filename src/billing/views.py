@@ -11,7 +11,6 @@ from django.conf import settings
 import stripe
 from django.contrib import messages
 
-# Create your views here.
 stripe.api_key = settings.STRIPE_API_KEY
 
 def payment_success_view(request):
@@ -54,7 +53,6 @@ def payment_method_view(request):
     except Exception as e:
         print(f"Erro: {str(e)}")
         return redirect("cart:home")
-    
 @csrf_exempt
 @require_POST
 def create_checkout_session(request):
