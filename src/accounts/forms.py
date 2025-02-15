@@ -11,7 +11,7 @@ class UserAdminCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['email']
+        fields = ['email', 'full_name']
     
     def clean(self):
         cleaned_data = super().clean()
@@ -24,6 +24,7 @@ class UserAdminCreationForm(forms.ModelForm):
     def save(self, commit=True):
         user = super(UserAdminCreationForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password"])
+        user.is_verified = False
         if commit:
             user.save()
         return user
@@ -34,7 +35,7 @@ class UserAdminChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['full_name', 'email', 'password', 'active', 'admin']
+        fields = ['full_name', 'email', 'password', 'active', 'admin', 'is_verified']
 
     def clean_password(self):
         return self.initial["password"]
@@ -43,8 +44,8 @@ class GuestForm(forms.Form):
     email = forms.EmailField()
 
 class LoginForm(forms.Form):
-    email = forms.EmailField(label='Email')
-    password = forms.CharField(label='Senha', widget=forms.PasswordInput)
+    email = forms.EmailField(label="Email", max_length=255, widget=forms.EmailInput(attrs={"class": "form-control"}))
+    password = forms.CharField(label="Senha", max_length=255, widget=forms.PasswordInput(attrs={"class": "form-control"}))
 
 class RegisterForm(forms.ModelForm):
 
@@ -53,7 +54,7 @@ class RegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['email']
+        fields = ['email', 'full_name']  # [ADDED] Incluído full_name no formulário
     
     def clean(self):
         cleaned_data = super().clean()
@@ -66,6 +67,7 @@ class RegisterForm(forms.ModelForm):
     def save(self, commit=True):
         user = super(RegisterForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password"])
+        user.is_verified = False  # [ADDED] Usuários não verificados por padrão
         if commit:
             user.save()
         return user
