@@ -38,7 +38,7 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
 # Stripe Configuration
 STRIPE_API_KEY = env('STRIPE_API_KEY')
-STRIPE_PUB_KEY = env('STRIPE_PUB_KEY')
+
 
 # Application definition
 
